@@ -120,6 +120,10 @@ def monitor_battery(
                 if not raw_line:
                     continue
 
+                # Ignore monitor/debug lines and only parse strict CSV payload rows.
+                if raw_line.count(",") != 3:
+                    continue
+
                 try:
                     temperature, current, voltage, esp_status = parse_serial_line(raw_line)
                 except ValueError as exc:

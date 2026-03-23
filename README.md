@@ -16,13 +16,15 @@ At the same time, the Python app receives serial data in real time and predicts 
 
 ## Data Format (ESP32 -> Python)
 
-Serial payload format:
+Serial payload format used by Python parser:
 
 `temperature,current,voltage,status`
 
 Example:
 
 `34,0.8,3.7,NORMAL`
+
+ESP32 also prints additional human-readable monitor lines for easier viewing in Arduino Serial Monitor.
 
 ## What Happens in This Project
 
@@ -165,14 +167,33 @@ AI Prediction:     Normal
 ALERT: System Normal
 ```
 
+## ESP32/Arduino Serial Output Example
+
+These are direct lines printed by ESP32/Arduino Serial Monitor (one cycle per second):
+
+```text
+34.00,0.80,3.70,NORMAL
+--------------------------------
+Temperature (C): 34.00
+Current (A): 0.80
+Voltage (V): 3.70
+Status: NORMAL
+```
+
+Python monitor reads only the CSV line and ignores extra human-readable lines.
+
 ## Notes and Assumptions
 
 - Current firmware uses generic calibration defaults (LM35/ACS712/divider-style assumptions).
 - For accurate real hardware values, calibrate constants using your sensor datasheets and measured references.
 - Python script skips malformed serial lines safely and keeps running.
+- Trend-based early warning (for example, temperature rising rapidly before absolute thresholds) is not implemented yet in the current version. Right now prediction is based on current reading values only, not rate of change over time.
 
 ## Optional Extensions
 
 - Add GSM SMS alert in unsafe condition (DISCONNECTED).
 - Add MOSFET-based heating simulation logic in ESP32 loop.
 - Save LoRa receiver logs and compare with serial stream.
+
+
+

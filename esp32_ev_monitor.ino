@@ -115,8 +115,19 @@ void loop() {
   char payload[64];
   snprintf(payload, sizeof(payload), "%.2f,%.2f,%.2f,%s", temperatureC, currentA, voltageV, status);
 
-  // Serial output format: temperature,current,voltage,status
+  // Machine-readable CSV line for Python parser
   Serial.println(payload);
+
+  // Human-readable lines for Arduino Serial Monitor
+  Serial.println("--------------------------------");
+  Serial.print("Temperature (C): ");
+  Serial.println(temperatureC, 2);
+  Serial.print("Current (A): ");
+  Serial.println(currentA, 2);
+  Serial.print("Voltage (V): ");
+  Serial.println(voltageV, 2);
+  Serial.print("Status: ");
+  Serial.println(status);
 
   // Send same payload over LoRa
   LoRa.beginPacket();
